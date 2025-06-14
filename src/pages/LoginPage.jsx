@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import api from '../services/api';
+import { useNavigate } from 'react-router-dom'; // ✅ Import this
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate(); // ✅ Use this
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await api.post('/auth/login', { username, password });
       const { token } = response.data;
-      localStorage.setItem('token', token); // ✅ store token for future API calls
+      localStorage.setItem('token', token); // ✅ Store token
       alert('Login successful!');
-      // redirect to dashboard or portfolio page
+      navigate('/portfolio'); // ✅ Redirect to Portfolio page
     } catch (error) {
-      alert('Login failed: ' + error.response?.data?.message || 'Server error');
+      alert('Login failed: ' + (error.response?.data?.message || 'Server error'));
     }
   };
 
